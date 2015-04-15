@@ -1,0 +1,6 @@
+clock (2) - 52
+data out (4) - 50
+Chip Select (3) - - 53
+data in (6) - 51
+pin 14 is in Arduino 40.   When it's high, data is ready to read from data out
+Technically pin 14 is Data Ready

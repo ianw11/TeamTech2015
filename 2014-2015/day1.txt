@@ -1,0 +1,51 @@
+Machine Shop
+In house ^
+
+Ceramics workshop
+
+Avionics
+
+Lots of things to play with
+
+Gimble half a million dollars
+
+Desert hawk is not waterproof or weather proof
+
+Needs direct line of sight
+
+You can move the antenna (it's RF, specifically FM)
+
+Autopilot
+
+15km radius, not a restriction.  Can have antennas
+
+Handoff ground stations
+
+90 minutes of flight time
+
+They wouldn't talk about price, could be $500
+
+Parts are survivable, like they can hit the ground
+
+Deep stall - stalls so hard it can just drop; controlled stall so they can start up if needed
+
+IPT
+
+autonomous, works as soon as it goes but needs to be in the air first
+
+If they're running through a mission and lost communications, the autopilot will turn around to re-find communications.  Will orbit.
+
+You can upload a "mission"
+
+Forest fire analysis seems good, we have a great infrared camera built in
+
+Max speed was 50knots, usually 30knots
+Best altitude is "very high"
+
+
+
+Top 3 items from the Tour
+-Autopilot
+-Infrared
+-Line of sight is important, so smoke is an issue?
+
