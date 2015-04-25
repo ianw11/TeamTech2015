@@ -1,0 +1,6 @@
+def readADCSingleEnded(self, channel=0, pga=6144, sps=250):
+    "Gets a single-ended ADC reading from the specified channel in mV. \
+    The sample rate for this mode (single-shot) can be used to lower the noise \
+    (low sps) or to lower the power consumption (high sps) by duty cycling, \
+def getLastConversionResults(self):
+    "Returns the last ADC conversion result in mV"
