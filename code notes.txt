@@ -4,3 +4,92 @@ def readADCSingleEnded(self, channel=0, pga=6144, sps=250):
     (low sps) or to lower the power consumption (high sps) by duty cycling, \
 def getLastConversionResults(self):
     "Returns the last ADC conversion result in mV"
+
+
+RPi SSH:
+$ ssh pi@192.168.2.8
+password: raspberry
+
+
+
+For testing on 5/2:
+Like I discussed, we have 3 main points: Letting the RPi use the WiFi dongle; Connecting and somewhat controlling the GoPro, and Capturing a stream from the GoPro.
+The rest of this should have everything you need.
+
+Call/text me if you need anything: 503-707-9430
+
+1: Letting the RPi use the WiFi dongle
+http://www.savagehomeautomation.com/projects/raspberry-pi-installing-the-edimax-ew-7811un-usb-wifi-adapte.html
+Follow that guide.  Start at the red 'CONFIGURATION' and work from there.  If you want to start at the top of the document, it'll give you a little bit of background.
+Anyway, each step should be mostly copy-paste.  What I can see from here, though, is that the example uses WPA security on wifi, which I don't think SecureMustangWireless uses.  This might be something to look up.
+
+Step 1 is completed if you can run 'ping google.com' in the command line and get data back.  
+
+
+2: Connecting to the GoPro
+Now that the Raspberry Pi can connect to WiFi, it's time to connect to the GoPro.
+
+   Setup:
+      Turn on the GoPro
+      Hold the button on the side (with a wrench on it) until the GoPro beeps and flashes a blue light.  The status screen should show a wifi symbol
+      MAKE SURE THE GOPRO IS IN SINGLE PHOTO MODE
+   With the GoPro broadcasting its network, it's time to connect to it.
+   The Raspberry Pi needs to be connected to the GoPro's wifi (which is something like TeamTech).  The password is: nectarsac
+   The takePic.c file should be ready to work at this point.  Run it to verify the GoPro can be controlled.
+   I added comments to the takePic file, which should answer things.  Feel free to modify it to play around
+   How to run .c files:
+      cd into the directory with the .c file
+      I included a script.sh file which should build the program.  So run './script.sh' to build the code
+         If this doesn't work, run 'sudo chmod 777 script.sh' first, then go ahead and run './script.sh'
+      Now that the .c file has been compiled, there should be an a.out file in the same directory.  Run './a.out' to run the program.
+   If takePic.c isn't working, you can try the commands in a web browser (if the computer is connected to the GoPro wifi network too and NOT SecureMustangWireless or the like)
+      In a web browser, type '10.5.5.9/gp/gpControl/command/shutter?p=1' in the url bar.  If this doesn't work, try '10.5.5.9:8080/gp/gpControl/command/shutter?p=1'
+   
+   Some explanation:
+      10.5.5.9 is the ip address of the GoPro (of the actual GoPro on the GoPro's Wifi network)
+      /gp/gpControl/command tells the GoPro we want to execute a command
+      /shutter?p=1 tells the shutter to activate
+      :8080 (if needed) says to use port 8080
+      
+   
+Step 2 is completed if the GoPro can be controlled to take a picture remotely from the RPi
+More fun for step 2:
+   Very useful.  All the replies are worth reading: http://www.reddit.com/r/gopro/comments/2md8hm/how_to_livestream_from_a_gopro_hero4/
+   Also interesting: https://github.com/KonradIT/goprowifihack
+      The HERO4.md has all the available URLs.  I did notice not all of them work, though, so play around if you want
+   Probably not needed (uses Hero3 and we are Hero4): http://diydrones.com/profiles/blogs/raspberry-pi-rpi-and-gopro-hero3
+   
+
+
+3: Capturing stream data
+   
+   So now the RPi can talk to the GoPro and can control it remotely!  What we need to do now is
+      Turn on a video stream
+      Record the video stream
+      Turn off the stream when we're done
+   
+   To turn on a video stream, all we need to do is send http://10.5.5.9:8080/gp/gpExec?p1=gpStreamA9&c1=restart to the GoPro.
+      I think the GoPro must be in video mode, so switch it from Single Photo mode to Video mode
+   To turn off a stream, send http://10.5.5.9:8080/gp/gpExec?p1=gpStreamA9&c1=stop
+   
+   To keep a stream on, you need to run the keepAlive.py file in the gopro directory in the background.
+      What this means is you need to learn about processes in UNIX and run the python program in the background
+      I forgot to mention that you could probably run 'python keepAlive.py &' in the command line to do this.  The '&' tells the terminal to run the command in the background
+         To kill this background process:
+            'ps -a' will show you all running processes
+            find the PID (process ID) of the keep alive script
+            'kill -9 <PID>' will terminate the process
+      I forget the exact order to start a stream, so it's some mix of:
+         Run keepAlive.py
+         Send the restart command
+         ...
+         Send the stop command
+         Terminate keepAlive.py
+   
+   
+   
+   When the video stream is going, you can run 'ffplay udp://10.5.5.9:8554' to watch the stream. THIS DOESN'T WORK ON THE GOPRO.
+   We need to write our own code to save the udp data.
+   Here is a website that *I think* will help us.  This is uncharted territory for me so I don't know how helpful it'll be: http://inst.eecs.berkeley.edu/~ee122/fa07/projects/p2files/packet_parser.c
+   
+Step 3 is completed when we can save video data from the GoPro (and watch it back later)
