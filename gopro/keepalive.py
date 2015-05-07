@@ -22,4 +22,4 @@ while True:
    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
    sock.sendto(MESSAGE, (UDP_IP, UDP_PORT))
    sleep(KEEP_ALIVE_PERIOD / 1000)
-   print "Sent keep_alive"
+   #print "Sent keep_alive"
