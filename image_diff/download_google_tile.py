@@ -10,6 +10,8 @@ filename = 'img.png'
 
 def downloadImage(lat, lon, zoom, type='satellite'):
 
+   bytes = None
+
    url = CORE_URL
    url += 'center=(' + str(lat) + ',' + str(lon) + ')'
    url += '&'
@@ -28,16 +30,18 @@ def downloadImage(lat, lon, zoom, type='satellite'):
       response = urllib2.urlopen(req)
       bytes = response.read()
       
-      f = open(filename,'wb')
-      f.write(bytes)
-      f.close()
    except Exception, e:
       print e
    
+   return bytes
    
 
 def main():
-   downloadImage(35.30202, -120.66146, 18)
+   data = downloadImage(35.30202, -120.66146, 18)
+   
+   f = open(filename,'wb')
+   f.write(data)
+   f.close()
 
 
 if __name__ == '__main__':
